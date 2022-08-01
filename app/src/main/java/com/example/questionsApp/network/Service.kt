@@ -1,5 +1,5 @@
-package com.example.myapplication.network
 
+import com.example.questionsApp.network.BaseRequest
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.FuelError
 import com.github.kittinunf.fuel.core.ResponseResultOf
@@ -12,6 +12,9 @@ import java.nio.charset.Charset
 sealed class ServiceException : Exception() {
     data class JsonDesiriazion(val messageDesc: String, val e: Exception? = null) : Exception()
     class UnAuthorizedException : Exception()
+    class RedirectException : Exception()
+    class AccountException : Exception()
+    class IntervalError : Exception()
     class TimeOutException : Exception()
 }
 
@@ -42,11 +45,9 @@ abstract class Service {
                 when {
                     request.queryParameter.isNullOrEmpty() -> Fuel.get(request.baseUrl + request.path, request.defaultUrlParams?.toList())
                         .header(request.header ?: request.defaultHeaders)
-                        .authentication().basic("aramco", "aramco-W!")
                         .timeoutRead(timeOutMilisTime)
                         .responseString()
                     else -> Fuel.get(request.baseUrl + request.path, request.queryParameter!!.toList())
-                        .authentication().basic("aramco", "aramco-W!")
                         .header(request.header ?: request.defaultHeaders)
                         .timeoutRead(timeOutMilisTime)
                         .responseString()
@@ -74,9 +75,15 @@ abstract class Service {
             if (statusCode == ResponseStatus.UnAuth.code) {
                 return@withContext NetworkResponse.Error(ServiceException.UnAuthorizedException())
             }
-
-
-
+            if (statusCode == ResponseStatus.Redirect.code) {
+                return@withContext NetworkResponse.Error(ServiceException.RedirectException())
+            }
+            if (statusCode == ResponseStatus.AccountException.code) {
+                return@withContext NetworkResponse.Error(ServiceException.AccountException())
+            }
+            if (statusCode == ResponseStatus.IntervalError.code) {
+                return@withContext NetworkResponse.Error(ServiceException.IntervalError())
+            }
             val (payload, error) = localResponse.third
             if (error?.isTimeOut() == true) {
                 return@withContext NetworkResponse.Error(ServiceException.TimeOutException())

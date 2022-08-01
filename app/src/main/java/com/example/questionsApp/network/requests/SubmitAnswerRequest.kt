@@ -1,7 +1,7 @@
-package com.example.myapplication.network.requests
+package com.example.questionsApp.network.requests
 
-import com.example.myapplication.models.QuestionSubmit
-import com.example.myapplication.network.BaseRequest
+import com.example.questionsApp.models.QuestionSubmit
+import com.example.questionsApp.network.BaseRequest
 import com.google.gson.JsonObject
 
 class SubmitAnswerRequest(private var questionSubmit: QuestionSubmit) : BaseRequest() {

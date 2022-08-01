@@ -1,4 +1,4 @@
-package com.example.myapplication.models
+package com.example.questionsApp.models
 
 data class QuestionSubmit(
     @JvmField var id: Int,

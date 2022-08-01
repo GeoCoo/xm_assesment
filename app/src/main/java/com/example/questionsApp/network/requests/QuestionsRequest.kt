@@ -1,6 +1,6 @@
-package com.example.myapplication.network.requests
+package com.example.questionsApp.network.requests
 
-import com.example.myapplication.network.BaseRequest
+import com.example.questionsApp.network.BaseRequest
 
 
 class QuestionsRequest : BaseRequest() {

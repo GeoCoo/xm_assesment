@@ -1,4 +1,4 @@
-package com.example.myapplication.viewmodels
+package com.example.questionsApp.viewmodels
 
 import androidx.lifecycle.ViewModel
 

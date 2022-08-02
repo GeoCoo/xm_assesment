@@ -14,12 +14,10 @@ class WelcomeFragment : Fragment(), ButtonView.BtnClickListener {
 
     private lateinit var binding: FragmentWelcomeBinding
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         binding = FragmentWelcomeBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -27,7 +25,6 @@ class WelcomeFragment : Fragment(), ButtonView.BtnClickListener {
         binding.apply {
             startBtn.bind("Start Survey")
             startBtn.btnClickListener = this@WelcomeFragment
-
         }
     }
 

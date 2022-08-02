@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.example.questionsApp.models.QuestionSubmit
+import com.example.questionsApp.models.AnswerToSubmit
 import com.example.questionsApp.network.controllers.GetQuestionsController
 import com.example.questionsApp.network.controllers.SubmitAnswerController
 import com.google.gson.internal.LinkedTreeMap
@@ -16,7 +16,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val mainController: GetQuestionsController by lazy { GetQuestionsController() }
     private val submitController: SubmitAnswerController by lazy { SubmitAnswerController() }
     private val responseMutable: MutableLiveData<ArrayList<LinkedTreeMap<String, Any>>?> = MutableLiveData()
-    private val submittedAnswerMutable: MutableLiveData<String?> = MutableLiveData()
+    private val submittedAnswerMutable: MutableLiveData<AnswerToSubmit?> = MutableLiveData()
 
     suspend fun fetchQuestions() {
         postResponse(mainController.fetchQuestions())
@@ -31,15 +31,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    fun postSubmitedAnswer(it: String?) {
-        submittedAnswerMutable.postValue(it)
+    fun postSubmitedAnswer(answer:AnswerToSubmit?) {
+        submittedAnswerMutable.postValue(answer)
     }
 
-    fun observeSubmittedAnswer(lifecycleOwner: LifecycleOwner, observer: Observer<String?>) {
+    fun observeSubmittedAnswer(lifecycleOwner: LifecycleOwner, observer: Observer<AnswerToSubmit?>) {
         submittedAnswerMutable.observe(lifecycleOwner, observer)
     }
 
-    suspend fun submitAnswer(questionSubmit: QuestionSubmit) {
+    suspend fun submitAnswer(questionSubmit: AnswerToSubmit?) {
         submitController.submitAnswer(questionSubmit)
     }
 

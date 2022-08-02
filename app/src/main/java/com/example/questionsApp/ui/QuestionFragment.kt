@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
@@ -13,6 +12,7 @@ import com.example.questionsApp.R
 import com.example.questionsApp.RecyclerAdapter
 import com.example.questionsApp.databinding.FragmentQuestionBinding
 import com.example.questionsApp.models.Question
+import com.example.questionsApp.models.AnswerToSubmit
 import com.example.questionsApp.ui.view.CustomRecyclerManager
 import com.example.questionsApp.utils.convertToModel
 import com.example.questionsApp.viewmodels.MainViewModel
@@ -27,10 +27,9 @@ class QuestionFragment : Fragment() {
     private var questionList: List<Question> = mutableListOf()
     private var questionsSize: Int? = null
     private lateinit var adapter: RecyclerAdapter
-    private var clickCallBack: (String?) -> Unit = {
+    private var clickCallBack: (AnswerToSubmit?) -> Unit = {
         mainViewModel.postSubmitedAnswer(it)
     }
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, avedInstanceState: Bundle?): View {
         binding = FragmentQuestionBinding.inflate(inflater, container, false)
@@ -54,7 +53,7 @@ class QuestionFragment : Fragment() {
             count.observe(viewLifecycleOwner) { countSteps ->
                 currentQuestion.text = "$countSteps"
                 handleBtnVisibility(countSteps)
-                binding.questionsRecycler.scrollToPosition(countSteps)
+                binding.questionsRecycler.scrollToPosition(countSteps-1)
             }
 
         }

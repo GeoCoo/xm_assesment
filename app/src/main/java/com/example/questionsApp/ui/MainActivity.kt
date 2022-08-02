@@ -29,8 +29,7 @@ class MainActivity : AppCompatActivity() {
                 fetchQuestions()
             }
             mainViewModel.observeSubmittedAnswer(this@MainActivity) { submition ->
-                if (submition == null) Toast.makeText(this@MainActivity, this@MainActivity.resources.getString(R.string.no_answer), Toast.LENGTH_LONG)
-                    .show()
+                if (submition == null) Toast.makeText(this@MainActivity, this@MainActivity.resources.getString(R.string.no_answer), Toast.LENGTH_LONG).show()
                 else
                     CoroutineScope(Dispatchers.IO).launch {
                         mainViewModel.submitAnswer(submition)

@@ -8,10 +8,10 @@ import com.example.questionsApp.network.requests.SubmitAnswerRequest
 
 class SubmitAnswerController:Service() {
 
-    suspend fun submitAnswer(questionSubmit: AnswerToSubmit?): EmptyResponse? {
+    suspend fun submitAnswer(questionSubmit: AnswerToSubmit?): Any? {
         val request = SubmitAnswerRequest(questionSubmit)
-        return when (val response = doSuspendRequest<EmptyResponse>(request)) {
-            is NetworkResponse.Success<*> -> response.result as EmptyResponse?
+        return when (val response = doSuspendRequest<Any?>(request)) {
+            is NetworkResponse.Success<*> -> response.result
             else -> null
         }
     }

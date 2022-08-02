@@ -23,10 +23,10 @@ class QuestionFragment : Fragment() {
 
     private lateinit var binding: FragmentQuestionBinding
     private lateinit var adapter: RecyclerAdapter
+    private var questionsSize: Int? = 0
     private val mainViewModel: MainViewModel by sharedViewModel()
     private val viewModel: QuestionViewModel by sharedViewModel()
     private var questionList: List<Question> = mutableListOf()
-    private var questionsSize: Int? = null
 
     private var clickCallBack: (AnswerToSubmit?) -> Unit = {
         mainViewModel.postSubmittedAnswer(it)
@@ -46,12 +46,20 @@ class QuestionFragment : Fragment() {
                 questionsTotal.text = questionsSize.toString()
                 initRecyclerView(questionList)
             }
+            mainViewModel.observeSubmissionResponse(viewLifecycleOwner){
+                it
+            }
             navigateBack()
             clickNextBtn()
             clickPreviousBtn()
             clickCount()
+            observeSubmissionResponse()
             setSuccessfulSubmissions()
         }
+    }
+
+    private fun observeSubmissionResponse() {
+
     }
 
     private fun setSuccessfulSubmissions() {

@@ -44,9 +44,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     suspend fun submitAnswer(questionSubmit: AnswerToSubmit?) {
         submitController.submitAnswer(questionSubmit)
+
     }
 
-    fun postSubmissionResponse(response: EmptyResponse) {
+    fun postSubmissionResponse(response: EmptyResponse?) {
         submissionResponseMutable.postValue(response)
     }
 

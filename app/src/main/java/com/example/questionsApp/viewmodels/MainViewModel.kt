@@ -43,8 +43,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     suspend fun submitAnswer(questionSubmit: AnswerToSubmit?) {
-        submitController.submitAnswer(questionSubmit)
-
+        val response = submitController.submitAnswer(questionSubmit)
+        postSubmissionResponse(response as EmptyResponse?)
     }
 
     fun postSubmissionResponse(response: EmptyResponse?) {

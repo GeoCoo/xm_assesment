@@ -110,7 +110,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <TextView
             android:id="@+id/total"
             android:layout_width="match_parent"
@@ -120,10 +119,21 @@
             android:padding="10dp"
             android:textColor="@color/black"
             android:textSize="25sp"
+            app:layout_constraintBottom_toTopOf="@id/confirmationVIew"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/firstRow"
             tools:text="QuestionS Submitted:2" />
+
+    <com.example.questionsApp.ui.viewUtils.ConfirmationVIew
+            android:id="@+id/confirmationVIew"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/questionsRecycler"
+            app:layout_constraintTop_toBottomOf="@id/total"
+            tools:visibility="visible" />
+
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/questionsRecycler"
@@ -131,10 +141,9 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/total"
+            app:layout_constraintTop_toBottomOf="@id/confirmationVIew"
             tools:listitem="@layout/question_item">
 
     </androidx.recyclerview.widget.RecyclerView>

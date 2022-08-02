@@ -7,6 +7,9 @@ import com.example.questionsApp.models.Question
 import com.google.gson.internal.LinkedTreeMap
 import kotlin.math.roundToInt
 
+enum class SubmissionConfirmation{
+    SUCCESS,FAIL
+}
 
 fun ArrayList<*>?.convertToModel(): List<Question> {
     val list: MutableList<Question> = mutableListOf()

@@ -12,14 +12,16 @@ import com.example.questionsApp.R
 import com.example.questionsApp.databinding.FragmentQuestionBinding
 import com.example.questionsApp.models.AnswerToSubmit
 import com.example.questionsApp.models.Question
+import com.example.questionsApp.ui.viewUtils.ConfirmationVIew
 import com.example.questionsApp.ui.viewUtils.CustomRecyclerManager
 import com.example.questionsApp.ui.viewUtils.RecyclerAdapter
+import com.example.questionsApp.utils.SubmissionConfirmation
 import com.example.questionsApp.utils.convertToModel
 import com.example.questionsApp.viewmodels.MainViewModel
 import com.example.questionsApp.viewmodels.QuestionViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class QuestionFragment : Fragment() {
+class QuestionFragment : Fragment(), ConfirmationVIew.ConfirmationViewClickListener {
 
     private lateinit var binding: FragmentQuestionBinding
     private lateinit var adapter: RecyclerAdapter
@@ -27,8 +29,10 @@ class QuestionFragment : Fragment() {
     private val mainViewModel: MainViewModel by sharedViewModel()
     private val viewModel: QuestionViewModel by sharedViewModel()
     private var questionList: List<Question> = mutableListOf()
+    private var answerToSubmit: AnswerToSubmit? = null
 
     private var clickCallBack: (AnswerToSubmit?) -> Unit = {
+        answerToSubmit = it
         mainViewModel.postSubmittedAnswer(it)
     }
 
@@ -40,21 +44,33 @@ class QuestionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
-            mainViewModel.observeResponse(viewLifecycleOwner) { questionsResponse ->
-                questionList = questionsResponse.convertToModel()
-                questionsSize = questionsResponse?.size
-                questionsTotal.text = questionsSize.toString()
-                initRecyclerView(questionList)
-            }
-            mainViewModel.observeSubmissionResponse(viewLifecycleOwner){
-                it
-            }
+            observeQuestions()
+            checkSubmissions()
             navigateBack()
             clickNextBtn()
             clickPreviousBtn()
             clickCount()
             observeSubmissionResponse()
             setSuccessfulSubmissions()
+        }
+    }
+
+    private fun observeQuestions() {
+        mainViewModel.observeResponse(viewLifecycleOwner) { questionsResponse ->
+            questionList = questionsResponse.convertToModel()
+            questionsSize = questionsResponse?.size
+            binding.questionsTotal.text = questionsSize.toString()
+            initRecyclerView(questionList)
+        }
+    }
+
+    private fun checkSubmissions() {
+        mainViewModel.observeSubmissionResponse(viewLifecycleOwner) { response ->
+            if (response == null) {
+                binding.confirmationVIew.bind(SubmissionConfirmation.FAIL)
+                binding.confirmationVIew.confirmationClickListener = this@QuestionFragment
+            } else binding.confirmationVIew.bind(SubmissionConfirmation.SUCCESS)
+
         }
     }
 
@@ -120,6 +136,20 @@ class QuestionFragment : Fragment() {
         binding.apply {
             if (count > 1) previousBtn.visibility = View.VISIBLE else previousBtn.visibility = View.GONE
             if (count < questionsSize!!) nextBtn.visibility = View.VISIBLE else nextBtn.visibility = View.GONE
+        }
+    }
+
+
+    override fun onConfirmActionClick(btnAction: ConfirmationVIew.BtnAction) {
+        when (btnAction) {
+            ConfirmationVIew.BtnAction.RETRY -> {
+                clickCallBack.invoke(answerToSubmit)
+                binding.confirmationVIew.visibility = View.GONE
+
+            }
+            ConfirmationVIew.BtnAction.CLOSE -> {
+                binding.confirmationVIew.visibility = View.GONE
+            }
         }
     }
 }

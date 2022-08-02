@@ -21,7 +21,6 @@ class ButtonView : CardView, View.OnClickListener {
 
     private var btnTitle: TextView
     private var button: CardView
-    private var btnActionId: Int? = null
 
     var btnClickListener: BtnClickListener? = null
 

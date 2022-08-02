@@ -10,10 +10,7 @@ import kotlinx.coroutines.withContext
 
 sealed class ServiceException : Exception() {
     data class JsonDesiriazion(val messageDesc: String, val e: Exception? = null) : Exception()
-    class UnAuthorizedException : Exception()
-    class RedirectException : Exception()
-    class AccountException : Exception()
-    class IntervalError : Exception()
+    class NotOkException: Exception()
     class TimeOutException : Exception()
 }
 
@@ -50,11 +47,17 @@ abstract class Service {
                     .timeoutRead(timeOutMilisTime)
                     .responseString()
             }
+
+            Log.d("tatatatatatatatatata", localResponse.second.statusCode.toString())
+            Log.d("xaxxaxaxaxaxaxxaxxxx", localResponse.first.body.toString())
+            Log.d("sasasasasasasasasasas", localResponse.third.component1().toString())
+            Log.d("dadadadadadadadadada", localResponse.third.component2().toString())
+
+
             val statusCode = localResponse.second.statusCode
             if (statusCode == ResponseStatus.NOT_OK.code) {
-                return@withContext NetworkResponse.Error(ServiceException.UnAuthorizedException())
+                return@withContext NetworkResponse.Error(ServiceException.NotOkException())
             }
-
 
             val (payload, error) = localResponse.third
             if (error?.isTimeOut() == true) {
@@ -62,7 +65,7 @@ abstract class Service {
             }
             try {
                 val modelDesiriazed = Gson().fromJson(payload, T::class.java)
-                Log.d("tatatatatatatatatata", modelDesiriazed.toString())
+                Log.d("lalalalalalalla", modelDesiriazed.toString())
 
                 if (modelDesiriazed != null) {
                     return@withContext NetworkResponse.Success(modelDesiriazed)

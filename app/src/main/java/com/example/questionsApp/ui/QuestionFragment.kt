@@ -9,11 +9,11 @@ import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.questionsApp.R
-import com.example.questionsApp.RecyclerAdapter
 import com.example.questionsApp.databinding.FragmentQuestionBinding
-import com.example.questionsApp.models.Question
 import com.example.questionsApp.models.AnswerToSubmit
-import com.example.questionsApp.ui.view.CustomRecyclerManager
+import com.example.questionsApp.models.Question
+import com.example.questionsApp.ui.viewUtils.CustomRecyclerManager
+import com.example.questionsApp.ui.viewUtils.RecyclerAdapter
 import com.example.questionsApp.utils.convertToModel
 import com.example.questionsApp.viewmodels.MainViewModel
 import com.example.questionsApp.viewmodels.QuestionViewModel
@@ -21,14 +21,15 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class QuestionFragment : Fragment() {
 
+    private lateinit var binding: FragmentQuestionBinding
+    private lateinit var adapter: RecyclerAdapter
     private val mainViewModel: MainViewModel by sharedViewModel()
     private val viewModel: QuestionViewModel by sharedViewModel()
-    private lateinit var binding: FragmentQuestionBinding
     private var questionList: List<Question> = mutableListOf()
     private var questionsSize: Int? = null
-    private lateinit var adapter: RecyclerAdapter
+
     private var clickCallBack: (AnswerToSubmit?) -> Unit = {
-        mainViewModel.postSubmitedAnswer(it)
+        mainViewModel.postSubmittedAnswer(it)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, avedInstanceState: Bundle?): View {
@@ -48,23 +49,35 @@ class QuestionFragment : Fragment() {
             navigateBack()
             clickNextBtn()
             clickPreviousBtn()
+            clickCount()
+            setSuccessfulSubmissions()
+        }
+    }
 
+    private fun setSuccessfulSubmissions() {
+        binding.apply {
+            val answersCounter: LiveData<Int> = mainViewModel.submissionCounting()
+            answersCounter.observe(viewLifecycleOwner) { countAnswers ->
+                total.text = resources.getString(R.string.submission_total, countAnswers.toString())
+            }
+        }
+    }
+
+    private fun clickCount() {
+        binding.apply {
             val count: LiveData<Int> = viewModel.getCountTotal()
             count.observe(viewLifecycleOwner) { countSteps ->
                 currentQuestion.text = "$countSteps"
                 handleBtnVisibility(countSteps)
-                binding.questionsRecycler.scrollToPosition(countSteps-1)
+                questionsRecycler.scrollToPosition(countSteps - 1)
             }
-
         }
     }
 
     private fun initRecyclerView(questionList: List<Question>?) {
         binding.apply {
-            questionsRecycler
             adapter = RecyclerAdapter(questionList, clickCallBack)
             questionsRecycler.adapter = adapter
-
             val manager = object : CustomRecyclerManager(requireActivity()) {
                 override fun canScrollHorizontally(): Boolean {
                     return false
@@ -72,8 +85,10 @@ class QuestionFragment : Fragment() {
             }
             manager.orientation = LinearLayoutManager.HORIZONTAL
             questionsRecycler.layoutManager = manager
+
         }
     }
+
 
     private fun clickPreviousBtn() {
         binding.previousBtn.setOnClickListener {

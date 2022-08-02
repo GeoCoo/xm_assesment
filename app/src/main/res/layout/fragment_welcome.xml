@@ -20,7 +20,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-    <com.example.questionsApp.ui.view.ButtonView
+    <com.example.questionsApp.ui.viewUtils.ButtonView
             android:id="@+id/startBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,6 +29,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/welcomeLabel">
 
-    </com.example.questionsApp.ui.view.ButtonView>
+    </com.example.questionsApp.ui.viewUtils.ButtonView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

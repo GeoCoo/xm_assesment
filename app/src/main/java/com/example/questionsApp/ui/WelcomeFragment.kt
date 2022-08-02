@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.questionsApp.R
 import com.example.questionsApp.databinding.FragmentWelcomeBinding
-import com.example.questionsApp.ui.view.ButtonView
+import com.example.questionsApp.ui.viewUtils.ButtonView
 
 class WelcomeFragment : Fragment(), ButtonView.BtnClickListener {
 

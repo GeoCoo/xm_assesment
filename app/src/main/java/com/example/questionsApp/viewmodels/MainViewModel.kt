@@ -6,32 +6,35 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.questionsApp.models.AnswerToSubmit
+import com.example.questionsApp.models.EmptyResponse
 import com.example.questionsApp.network.controllers.GetQuestionsController
 import com.example.questionsApp.network.controllers.SubmitAnswerController
-import com.google.gson.internal.LinkedTreeMap
 
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val mainController: GetQuestionsController by lazy { GetQuestionsController() }
     private val submitController: SubmitAnswerController by lazy { SubmitAnswerController() }
-    private val responseMutable: MutableLiveData<ArrayList<LinkedTreeMap<String, Any>>?> = MutableLiveData()
-    private val submittedAnswerMutable: MutableLiveData<AnswerToSubmit?> = MutableLiveData()
+    private val questionResponseMutable: MutableLiveData<ArrayList<*>?> by lazy { MutableLiveData<ArrayList<*>?>() }
+    private val submittedAnswerMutable: MutableLiveData<AnswerToSubmit?> by lazy { MutableLiveData<AnswerToSubmit?>() }
+    private val submissionResponseMutable: MutableLiveData<EmptyResponse> by lazy { MutableLiveData<EmptyResponse>() }
+    private val submissionCounterMutable: MutableLiveData<Int> by lazy { MutableLiveData<Int>() }
+    private var answersCount: Int = 0
 
     suspend fun fetchQuestions() {
-        postResponse(mainController.fetchQuestions())
+        postQuestionsList(mainController.fetchQuestions())
     }
 
-    private fun postResponse(response: ArrayList<LinkedTreeMap<String, Any>>?) {
-        responseMutable.postValue(response)
+    private fun postQuestionsList(response: ArrayList<*>?) {
+        questionResponseMutable.postValue(response)
     }
 
-    fun observeResponse(lifecycleOwner: LifecycleOwner, observer: Observer<ArrayList<LinkedTreeMap<String, Any>>?>) {
-        responseMutable.observe(lifecycleOwner, observer)
+    fun observeResponse(lifecycleOwner: LifecycleOwner, observer: Observer<ArrayList<*>?>) {
+        questionResponseMutable.observe(lifecycleOwner, observer)
     }
 
 
-    fun postSubmitedAnswer(answer:AnswerToSubmit?) {
+    fun postSubmittedAnswer(answer: AnswerToSubmit?) {
         submittedAnswerMutable.postValue(answer)
     }
 
@@ -41,6 +44,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     suspend fun submitAnswer(questionSubmit: AnswerToSubmit?) {
         submitController.submitAnswer(questionSubmit)
+    }
+
+    fun postSubmissionResponse(response: EmptyResponse) {
+        submissionResponseMutable.postValue(response)
+    }
+
+    fun observeSubmissionResponse(lifecycleOwner: LifecycleOwner, observer: Observer<EmptyResponse>) {
+        submissionResponseMutable.observe(lifecycleOwner, observer)
+    }
+
+
+    fun submissionCounting(): MutableLiveData<Int> {
+        submissionCounterMutable.value = answersCount
+        return submissionCounterMutable
+    }
+
+    fun getNextSubmission() {
+        answersCount += 1
+        submissionCounterMutable.value = answersCount
     }
 
 

@@ -3,6 +3,7 @@ package com.example.questionsApp.ui
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.questionsApp.R
 import com.example.questionsApp.databinding.ActivityMainBinding
 import com.example.questionsApp.viewmodels.MainViewModel
 import kotlinx.coroutines.*
@@ -28,7 +29,8 @@ class MainActivity : AppCompatActivity() {
                 fetchQuestions()
             }
             mainViewModel.observeSubmittedAnswer(this@MainActivity) { submition ->
-                if (submition == null) Toast.makeText(this@MainActivity, "you haven't answer", Toast.LENGTH_LONG).show()
+                if (submition == null) Toast.makeText(this@MainActivity, this@MainActivity.resources.getString(R.string.no_answer), Toast.LENGTH_LONG)
+                    .show()
                 else
                     CoroutineScope(Dispatchers.IO).launch {
                         mainViewModel.submitAnswer(submition)

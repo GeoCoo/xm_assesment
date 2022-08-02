@@ -9,6 +9,5 @@ class KoinModule(application: QuestionsApp) {
     val modules = module {
         viewModel { MainViewModel(application) }
         viewModel { QuestionViewModel(application) }
-
     }
 }

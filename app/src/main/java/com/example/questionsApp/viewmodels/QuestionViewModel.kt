@@ -4,30 +4,23 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 
-class QuestionViewModel(application: Application) : AndroidViewModel(application) {
+ class QuestionViewModel(application: Application) : AndroidViewModel(application) {
 
     private var clickCount: Int = 1
-    private var countLiveData = MutableLiveData<Int>()
+    private var counterMutable = MutableLiveData<Int>()
 
-    open fun getCountTotal(): MutableLiveData<Int> {
-        countLiveData.value = clickCount
-        return countLiveData
+     fun getCountTotal(): MutableLiveData<Int> {
+         counterMutable.value = clickCount
+        return counterMutable
     }
 
-    open fun getNextCount() {
+     fun getNextCount() {
         clickCount += 1
-        countLiveData.value = clickCount
+         counterMutable.value = clickCount
     }
 
-    open fun getPreviousCount() {
+     fun getPreviousCount() {
         clickCount -= 1
-        countLiveData.value = clickCount
+         counterMutable.value = clickCount
     }
-
-
-    fun submitAnswer(){
-
-    }
-
-
 }

@@ -1,12 +1,12 @@
-package com.example.questionsApp
+package com.example.questionsApp.ui.viewUtils
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.questionsApp.R
 import com.example.questionsApp.databinding.QuestionItemBinding
 import com.example.questionsApp.models.AnswerToSubmit
 import com.example.questionsApp.models.Question
-import com.example.questionsApp.ui.view.ButtonView
 import com.example.questionsApp.utils.afterTextChanged
 
 
@@ -41,7 +41,7 @@ class RecyclerAdapter(private val questionsList: List<Question>?, private var cl
             currentQuestion = question
             binding.apply {
                 questionTxt.text = question?.question
-                submit.bind("Submit")
+                submit.bind(itemView.resources.getString(R.string.submit_btn_txt))
                 submit.btnClickListener = this@QuestionVIewHolder
                 answerTxt.afterTextChanged { answer = AnswerToSubmit(currentQuestion?.id, it) }
 

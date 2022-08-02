@@ -1,4 +1,4 @@
-package com.example.questionsApp.ui.view
+package com.example.questionsApp.ui.viewUtils
 
 import android.content.Context
 import androidx.recyclerview.widget.LinearLayoutManager

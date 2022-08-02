@@ -19,12 +19,13 @@
 
         <ImageView
                 android:id="@+id/backArrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="25dp"
+                android:layout_height="0dp"
+                android:src="@drawable/ic_back_arrow"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@android:drawable/ic_media_previous"
+                app:srcCompat="@drawable/ic_back_arrow"
                 app:tint="@color/black" />
 
 
@@ -32,10 +33,13 @@
                 android:id="@+id/questionLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Questions"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/questions_title"
                 android:textColor="@color/black"
                 android:textSize="25sp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/currentQuestion"
                 app:layout_constraintStart_toEndOf="@id/backArrow"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,12 +47,24 @@
                 android:id="@+id/currentQuestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1"
                 android:textColor="@color/black"
                 android:textSize="25sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/questionsTotal"
+                app:layout_constraintEnd_toStartOf="@+id/symbol"
                 app:layout_constraintStart_toEndOf="@id/questionLabel"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="1" />
+
+        <TextView
+                android:id="@+id/symbol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="/"
+                android:textColor="@color/black"
+                android:textSize="25sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/currentQuestion"
+                app:layout_constraintStart_toEndOf="@id/currentQuestion"
                 app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -58,10 +74,9 @@
                 android:textColor="@color/black"
                 android:textSize="25sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/previousBtn"
-                app:layout_constraintStart_toEndOf="@id/currentQuestion"
+                app:layout_constraintStart_toEndOf="@id/symbol"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="/20" />
+                tools:text="20" />
 
 
         <TextView
@@ -103,12 +118,12 @@
             android:background="@color/white"
             android:gravity="center"
             android:padding="10dp"
-            android:text="QuestionS Submitted:2"
             android:textColor="@color/black"
             android:textSize="25sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/firstRow" />
+            app:layout_constraintTop_toBottomOf="@id/firstRow"
+            tools:text="QuestionS Submitted:2" />
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/questionsRecycler"

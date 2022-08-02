@@ -7,10 +7,10 @@ import com.google.gson.internal.LinkedTreeMap
 
 class GetQuestionsController : Service() {
 
-    suspend fun fetchQuestions(): ArrayList<LinkedTreeMap<String, Any>>? {
+    suspend fun fetchQuestions(): ArrayList<*>? {
         val request = QuestionsRequest()
-        return when (val response = doSuspendRequest<ArrayList<LinkedTreeMap<String, Any>>?>(request)) {
-            is NetworkResponse.Success<*> -> response.result as ArrayList<LinkedTreeMap<String, Any>>?
+        return when (val response = doSuspendRequest<ArrayList<*>?>(request)) {
+            is NetworkResponse.Success<*> -> response.result as ArrayList<*>?
             else -> null
         }
     }

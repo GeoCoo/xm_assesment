@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">QuestionsApp</string>
+    <string name="submit_btn_txt">Submit</string>
+    <string name="no_answer">You haven\'t answered</string>
+    <string name="submission_total">Questions Submitted %1s</string>
+    <string name="questions_title">Questions</string>
+
 </resources>

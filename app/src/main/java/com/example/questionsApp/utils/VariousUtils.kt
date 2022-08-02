@@ -8,9 +8,10 @@ import com.google.gson.internal.LinkedTreeMap
 import kotlin.math.roundToInt
 
 
-fun ArrayList<LinkedTreeMap<String, Any>>?.convertToModel(): List<Question> {
+fun ArrayList<*>?.convertToModel(): List<Question> {
     val list: MutableList<Question> = mutableListOf()
-    this?.forEach {
+    val arrayList = this as ArrayList<LinkedTreeMap<String, Any>>
+    arrayList.forEach {
         list.add(Question((it["id"] as Double).convertToInt(), it["question"].toString()))
     }
     return list

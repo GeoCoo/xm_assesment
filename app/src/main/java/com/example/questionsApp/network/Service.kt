@@ -1,13 +1,12 @@
-
+import android.util.Log
 import com.example.questionsApp.network.BaseRequest
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.FuelError
 import com.github.kittinunf.fuel.core.ResponseResultOf
-import com.github.kittinunf.fuel.core.extensions.authentication
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.nio.charset.Charset
 
 sealed class ServiceException : Exception() {
     data class JsonDesiriazion(val messageDesc: String, val e: Exception? = null) : Exception()
@@ -26,10 +25,8 @@ sealed class NetworkResponse {
 
 enum class ResponseStatus(val code: Int) {
     OK(200),
-    UnAuth(400),
-    Redirect(300),
-    AccountException(600),
-    IntervalError(500)
+    NOT_OK(400),
+
 }
 
 abstract class Service {
@@ -42,54 +39,31 @@ abstract class Service {
         return withContext(Dispatchers.IO) {
             var localResponse: ResponseResultOf<String>? = null
             localResponse = if (request.method == BaseRequest.Method.GET) {
-                when {
-                    request.queryParameter.isNullOrEmpty() -> Fuel.get(request.baseUrl + request.path, request.defaultUrlParams?.toList())
-                        .header(request.header ?: request.defaultHeaders)
-                        .timeoutRead(timeOutMilisTime)
-                        .responseString()
-                    else -> Fuel.get(request.baseUrl + request.path, request.queryParameter!!.toList())
-                        .header(request.header ?: request.defaultHeaders)
-                        .timeoutRead(timeOutMilisTime)
-                        .responseString()
-                }
+                Fuel.get(request.baseUrl + request.path, request.defaultUrlParams?.toList())
+                    .header(request.header ?: request.defaultHeaders)
+                    .timeoutRead(timeOutMilisTime)
+                    .responseString()
+
             } else {
-                when (request.body) {
-                    null -> Fuel.post(
-                        request.baseUrl + request.path,
-                        request.defaultUrlParams?.toList()
-                    )
-                        .header(request.header ?: request.defaultHeaders)
-                        .timeoutRead(timeOutMilisTime)
-                        .responseString()
-                    else -> Fuel.post(
-                        request.baseUrl + request.path,
-                        request.defaultUrlParams?.toList()
-                    )
-                        .header(request.header ?: request.defaultHeaders)
-                        .timeoutRead(timeOutMilisTime)
-                        .body(request.body!!, Charset.forName("UTF-8"))
-                        .responseString()
-                }
+                Fuel.post(request.baseUrl + request.path, request.defaultUrlParams?.toList())
+                    .header(request.header ?: request.defaultHeaders)
+                    .timeoutRead(timeOutMilisTime)
+                    .responseString()
             }
             val statusCode = localResponse.second.statusCode
-            if (statusCode == ResponseStatus.UnAuth.code) {
+            if (statusCode == ResponseStatus.NOT_OK.code) {
                 return@withContext NetworkResponse.Error(ServiceException.UnAuthorizedException())
             }
-            if (statusCode == ResponseStatus.Redirect.code) {
-                return@withContext NetworkResponse.Error(ServiceException.RedirectException())
-            }
-            if (statusCode == ResponseStatus.AccountException.code) {
-                return@withContext NetworkResponse.Error(ServiceException.AccountException())
-            }
-            if (statusCode == ResponseStatus.IntervalError.code) {
-                return@withContext NetworkResponse.Error(ServiceException.IntervalError())
-            }
+
+
             val (payload, error) = localResponse.third
             if (error?.isTimeOut() == true) {
                 return@withContext NetworkResponse.Error(ServiceException.TimeOutException())
             }
             try {
                 val modelDesiriazed = Gson().fromJson(payload, T::class.java)
+                Log.d("tatatatatatatatatata", modelDesiriazed.toString())
+
                 if (modelDesiriazed != null) {
                     return@withContext NetworkResponse.Success(modelDesiriazed)
                 } else {
@@ -106,4 +80,8 @@ abstract class Service {
 
 fun FuelError.isTimeOut(): Boolean {
     return this.exception.message == "timeout"
+}
+
+inline fun <reified T> parseData(row :String): T{
+    return Gson().fromJson(row, object: TypeToken<T>(){}.type)
 }

@@ -16,7 +16,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val mainViewModel: MainViewModel by viewModel()
-    private var response: ArrayList<Question>? = arrayListOf()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,8 +29,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         GlobalScope.launch(Dispatchers.IO) {
-        response = mainViewModel.fetchQuestions()
-        response
+            mainViewModel.fetchQuestions()
         }
 
     }

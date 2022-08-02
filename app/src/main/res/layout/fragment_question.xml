@@ -21,11 +21,11 @@
                 android:id="@+id/backArrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tint="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@android:drawable/ic_media_previous" />
+                app:srcCompat="@android:drawable/ic_media_previous"
+                app:tint="@color/black" />
 
 
         <TextView
@@ -40,16 +40,28 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-                android:id="@+id/percent"
+                android:id="@+id/currentQuestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1/20"
+                android:text="1"
+                android:textColor="@color/black"
+                android:textSize="25sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/questionsTotal"
+                app:layout_constraintStart_toEndOf="@id/questionLabel"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+                android:id="@+id/questionsTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="25sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/previousBtn"
-                app:layout_constraintStart_toEndOf="@id/questionLabel"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="@id/currentQuestion"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="/20" />
 
 
         <TextView
@@ -60,9 +72,11 @@
                 android:text="Previous"
                 android:textColor="@color/black"
                 android:textSize="25sp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/nextBtn"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
 
         <TextView
                 android:id="@+id/nextBtn"
@@ -73,29 +87,42 @@
                 android:text="Next"
                 android:textColor="@color/black"
                 android:textSize="25sp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <TextView
             android:id="@+id/total"
-            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:gravity="center"
+            android:padding="10dp"
             android:text="QuestionS Submitted:2"
             android:textColor="@color/black"
             android:textSize="25sp"
-            android:padding="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/firstRow" />
 
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/questionsRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/total"
+            tools:listitem="@layout/question_item">
 
-
+    </androidx.recyclerview.widget.RecyclerView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

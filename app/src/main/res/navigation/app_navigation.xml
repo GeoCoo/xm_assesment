@@ -13,8 +13,7 @@
 
         <action
                 android:id="@+id/action_go_to_survey"
-                app:destination="@id/question_home"
-/>
+                app:destination="@id/question_home" />
     </fragment>
 
     <fragment
@@ -25,8 +24,8 @@
 
         <action
                 android:id="@+id/action_go_to_splash"
-                app:destination="@id/navigation_welcome"
-/>  </fragment>
+                app:destination="@id/navigation_welcome" />
+    </fragment>
 
 
 </navigation>

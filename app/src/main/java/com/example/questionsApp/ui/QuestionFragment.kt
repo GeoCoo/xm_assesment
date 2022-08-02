@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
@@ -26,6 +27,9 @@ class QuestionFragment : Fragment() {
     private var questionList: List<Question> = mutableListOf()
     private var questionsSize: Int? = null
     private lateinit var adapter: RecyclerAdapter
+    private var clickCallBack: (String?) -> Unit = {
+        mainViewModel.postSubmitedAnswer(it)
+    }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, avedInstanceState: Bundle?): View {
@@ -50,6 +54,7 @@ class QuestionFragment : Fragment() {
             count.observe(viewLifecycleOwner) { countSteps ->
                 currentQuestion.text = "$countSteps"
                 handleBtnVisibility(countSteps)
+                binding.questionsRecycler.scrollToPosition(countSteps)
             }
 
         }
@@ -58,7 +63,7 @@ class QuestionFragment : Fragment() {
     private fun initRecyclerView(questionList: List<Question>?) {
         binding.apply {
             questionsRecycler
-            adapter = RecyclerAdapter(questionList)
+            adapter = RecyclerAdapter(questionList, clickCallBack)
             questionsRecycler.adapter = adapter
 
             val manager = object : CustomRecyclerManager(requireActivity()) {

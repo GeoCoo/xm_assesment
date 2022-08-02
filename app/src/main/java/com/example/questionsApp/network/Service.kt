@@ -34,7 +34,7 @@ abstract class Service {
     val timeOutMilisTime: Int = 20 * 1000
     private var gSon: Gson = Gson()
 
-    //    @Throws(Exception::class)
+    @Throws(Exception::class)
     suspend inline fun <reified T> doSuspendRequest(request: BaseRequest): NetworkResponse {
         return withContext(Dispatchers.IO) {
             var localResponse: ResponseResultOf<String>? = null
@@ -82,6 +82,6 @@ fun FuelError.isTimeOut(): Boolean {
     return this.exception.message == "timeout"
 }
 
-inline fun <reified T> parseData(row :String): T{
-    return Gson().fromJson(row, object: TypeToken<T>(){}.type)
+inline fun <reified T> parseData(row: String): T {
+    return Gson().fromJson(row, object : TypeToken<T>() {}.type)
 }

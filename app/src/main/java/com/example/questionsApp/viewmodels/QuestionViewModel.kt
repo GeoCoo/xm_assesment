@@ -25,4 +25,9 @@ class QuestionViewModel(application: Application) : AndroidViewModel(application
     }
 
 
+    fun submitAnswer(){
+
+    }
+
+
 }

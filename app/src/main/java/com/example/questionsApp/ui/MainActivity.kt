@@ -3,12 +3,9 @@ package com.example.questionsApp.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.questionsApp.databinding.ActivityMainBinding
-import com.example.questionsApp.models.Question
+import com.example.questionsApp.models.QuestionSubmit
 import com.example.questionsApp.viewmodels.MainViewModel
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -28,8 +25,15 @@ class MainActivity : AppCompatActivity() {
     @OptIn(DelicateCoroutinesApi::class)
     override fun onResume() {
         super.onResume()
-        GlobalScope.launch(Dispatchers.IO) {
-            mainViewModel.fetchQuestions()
+        GlobalScope.launch(Dispatchers.Main) {
+            mainViewModel.apply {
+                fetchQuestions()
+            }
+            mainViewModel.observeSubmittedAnswer(this@MainActivity) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    mainViewModel.submitAnswer(QuestionSubmit(it?.toInt(), "lalalala"))
+                }
+            }
         }
 
     }

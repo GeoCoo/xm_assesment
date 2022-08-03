@@ -2,6 +2,7 @@ package com.example.questionsApp.network.requests
 
 import com.example.questionsApp.models.AnswerToSubmit
 import com.example.questionsApp.network.BaseRequest
+import com.example.questionsApp.utils.Method
 import com.google.gson.JsonObject
 
 class SubmitAnswerRequest(private var questionSubmit: AnswerToSubmit?) : BaseRequest() {
@@ -18,7 +19,6 @@ class SubmitAnswerRequest(private var questionSubmit: AnswerToSubmit?) : BaseReq
             val json = JsonObject()
             json.addProperty("id", questionSubmit?.id)
             json.addProperty("answer", questionSubmit?.answer)
-
             return json.toString()
         }
         set(value) {}

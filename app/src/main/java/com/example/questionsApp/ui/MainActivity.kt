@@ -39,9 +39,7 @@ class MainActivity : AppCompatActivity() {
                     } else makeToast()
             }
         }
-
     }
-
 
     private fun makeToast() = Toast.makeText(this@MainActivity,
         this@MainActivity.resources.getString(R.string.no_answer),

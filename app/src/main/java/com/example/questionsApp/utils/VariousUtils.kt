@@ -7,9 +7,6 @@ import com.example.questionsApp.models.Question
 import com.google.gson.internal.LinkedTreeMap
 import kotlin.math.roundToInt
 
-enum class SubmissionConfirmation{
-    SUCCESS,FAIL
-}
 
 fun ArrayList<*>?.convertToModel(): List<Question> {
     val list: MutableList<Question> = mutableListOf()
@@ -37,19 +34,4 @@ fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
         }
     })
 }
-
-fun EditText.beforeTextChanged(afterTextChanged: (String) -> Unit) {
-    this.addTextChangedListener(object : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            afterTextChanged.invoke(s.toString())
-        }
-
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-        override fun afterTextChanged(editable: Editable?) {
-
-        }
-    })
-}
-
 

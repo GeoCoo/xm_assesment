@@ -1,5 +1,6 @@
 import android.util.Log
 import com.example.questionsApp.network.BaseRequest
+import com.example.questionsApp.utils.Method
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.FuelError
 import com.github.kittinunf.fuel.core.ResponseResultOf
@@ -35,7 +36,7 @@ abstract class Service {
     suspend inline fun <reified T> doSuspendRequest(request: BaseRequest): NetworkResponse {
         return withContext(Dispatchers.IO) {
             var localResponse: ResponseResultOf<String>? = null
-            localResponse = if (request.method == BaseRequest.Method.GET) {
+            localResponse = if (request.method == Method.GET) {
                 Fuel.get(request.baseUrl + request.path, request.defaultUrlParams?.toList())
                     .header(request.header ?: request.defaultHeaders)
                     .timeoutRead(timeOutMilisTime)

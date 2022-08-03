@@ -1,11 +1,13 @@
 package com.example.questionsApp.viewmodels
 
 import android.app.Application
+import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.example.questionsApp.ui.viewUtils.ButtonView
+import com.example.questionsApp.utils.ButtonStates
+import com.example.questionsApp.utils.QuestionNavBtnState
 
 class QuestionViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -34,15 +36,22 @@ class QuestionViewModel(application: Application) : AndroidViewModel(application
         submittedIdsMutable.postValue(list)
     }
 
-
     fun observeSubmittedIds(lifecycleOwner: LifecycleOwner, observer: Observer<List<Int>?>) {
         submittedIdsMutable.observe(lifecycleOwner, observer)
-
     }
 
-    fun checkIfSubmitted(id: Int?): ButtonView.ButtonStates {
-        return if (list.contains(id)) ButtonView.ButtonStates.SUBMITTED else ButtonView.ButtonStates.SUBMIT
+    fun checkIfSubmitted(id: Int?): ButtonStates {
+        return if (list.contains(id)) ButtonStates.SUBMITTED else ButtonStates.SUBMIT
     }
 
-
+    fun setNavButtonVisibility(count: Int, size: Int?, state: QuestionNavBtnState): Int {
+        return when (state) {
+            QuestionNavBtnState.PREVIOUS -> {
+                if (count in 2..size!!) View.VISIBLE else View.GONE
+            }
+            QuestionNavBtnState.NEXT -> {
+                if (count in 1 until size!!) View.VISIBLE else View.GONE
+            }
+        }
+    }
 }

@@ -17,6 +17,8 @@ import com.example.questionsApp.ui.viewUtils.ButtonView
 import com.example.questionsApp.ui.viewUtils.ConfirmationVIew
 import com.example.questionsApp.ui.viewUtils.CustomRecyclerManager
 import com.example.questionsApp.ui.viewUtils.RecyclerAdapter
+import com.example.questionsApp.utils.BtnAction
+import com.example.questionsApp.utils.QuestionNavBtnState
 import com.example.questionsApp.utils.SubmissionConfirmation
 import com.example.questionsApp.utils.convertToModel
 import com.example.questionsApp.viewmodels.MainViewModel
@@ -36,19 +38,19 @@ class QuestionFragment : Fragment(), ConfirmationVIew.ConfirmationViewClickListe
 
     private var answerCallback: (AnswerToSubmit?) -> Unit = { answerToSubmit = it }
 
-    override fun onConfirmActionClick(btnAction: ConfirmationVIew.BtnAction) {
+    override fun onBtnActionClick() = mainViewModel.postSubmittedAnswer(answerToSubmit)
+
+    override fun onConfirmActionClick(btnAction: BtnAction) {
         when (btnAction) {
-            ConfirmationVIew.BtnAction.RETRY -> {
+            BtnAction.RETRY -> {
                 mainViewModel.postSubmittedAnswer(answerToSubmit)
                 binding.confirmationVIew.visibility = View.GONE
             }
-            ConfirmationVIew.BtnAction.CLOSE -> {
+            BtnAction.CLOSE -> {
                 binding.confirmationVIew.visibility = View.GONE
             }
         }
     }
-
-    override fun onBtnActionClick() = mainViewModel.postSubmittedAnswer(answerToSubmit)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, avedInstanceState: Bundle?): View {
         binding = FragmentQuestionBinding.inflate(inflater, container, false)
@@ -59,7 +61,7 @@ class QuestionFragment : Fragment(), ConfirmationVIew.ConfirmationViewClickListe
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
             observeQuestions()
-            checkSubmissions()
+            checkSubmissionStatus()
             navigateBack()
             clickNextBtn()
             clickPreviousBtn()
@@ -68,11 +70,10 @@ class QuestionFragment : Fragment(), ConfirmationVIew.ConfirmationViewClickListe
             observeSubmittedIds()
             submit.btnClickListener = this@QuestionFragment
             confirmationVIew.confirmationClickListener = this@QuestionFragment
-
         }
     }
 
-    private fun setSubmitBtn(id: Int) {
+    private fun setSubmitBtn(id: Int?) {
         binding.apply {
             submit.bind(viewModel.checkIfSubmitted(id))
         }
@@ -93,16 +94,13 @@ class QuestionFragment : Fragment(), ConfirmationVIew.ConfirmationViewClickListe
         }
     }
 
-    private fun checkSubmissions() {
+    private fun checkSubmissionStatus() {
         mainViewModel.observeSubmissionResponse(viewLifecycleOwner) { response ->
-            if (response != ResponseStatus.OK.code.toString()) binding.confirmationVIew.bind(SubmissionConfirmation.FAIL)
-            else {
+            if (response == ResponseStatus.OK.code.toString()) {
                 binding.confirmationVIew.bind(SubmissionConfirmation.SUCCESS)
-                answerToSubmit?.id?.let { id ->
-                    viewModel.postSubmittedId(id)
-                    setSubmitBtn(id)
-                }
-            }
+                answerToSubmit?.id?.let { id -> viewModel.postSubmittedId(id) }
+                setSubmitBtn(answerToSubmit?.id)
+            } else binding.confirmationVIew.bind(SubmissionConfirmation.FAIL)
         }
     }
 
@@ -120,7 +118,7 @@ class QuestionFragment : Fragment(), ConfirmationVIew.ConfirmationViewClickListe
             val count: LiveData<Int> = viewModel.getCountTotal()
             count.observe(viewLifecycleOwner) { countSteps ->
                 currentQuestionNumber.text = "$countSteps"
-                handleBtnVisibility(countSteps)
+                handleBtnVisibility(countSteps, questionsSize)
                 questionsRecycler.scrollToPosition(countSteps - 1)
                 setSubmitBtn(countSteps)
             }
@@ -138,10 +136,8 @@ class QuestionFragment : Fragment(), ConfirmationVIew.ConfirmationViewClickListe
             }
             manager.orientation = LinearLayoutManager.HORIZONTAL
             questionsRecycler.layoutManager = manager
-
         }
     }
-
 
     private fun clickPreviousBtn() {
         binding.previousBtn.setOnClickListener {
@@ -161,10 +157,10 @@ class QuestionFragment : Fragment(), ConfirmationVIew.ConfirmationViewClickListe
         }
     }
 
-    private fun handleBtnVisibility(count: Int) {
+    private fun handleBtnVisibility(count: Int, size: Int?) {
         binding.apply {
-            if (count > 1) previousBtn.visibility = View.VISIBLE else previousBtn.visibility = View.GONE
-            if (count < questionsSize!!) nextBtn.visibility = View.VISIBLE else nextBtn.visibility = View.GONE
+            previousBtn.visibility = viewModel.setNavButtonVisibility(count, size, QuestionNavBtnState.PREVIOUS)
+            nextBtn.visibility = viewModel.setNavButtonVisibility(count, size, QuestionNavBtnState.NEXT)
         }
     }
 

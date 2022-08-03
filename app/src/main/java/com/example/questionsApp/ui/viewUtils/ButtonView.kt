@@ -8,17 +8,13 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import com.example.questionsApp.R
+import com.example.questionsApp.utils.ButtonStates
 
 class ButtonView : CardView, View.OnClickListener {
 
     interface BtnClickListener {
         fun onBtnActionClick()
     }
-
-    enum class ButtonStates {
-        START, SUBMIT, SUBMITTED
-    }
-
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
@@ -35,7 +31,6 @@ class ButtonView : CardView, View.OnClickListener {
         btnTitle = view.findViewById(R.id.btnTitle)
         button = view.findViewById(R.id.buttonCv)
         button.setOnClickListener(this)
-
     }
 
     fun bind(state: ButtonStates) {
@@ -63,7 +58,6 @@ class ButtonView : CardView, View.OnClickListener {
             }
         }
     }
-
 
     override fun onClick(p0: View?) {
         btnClickListener?.onBtnActionClick()

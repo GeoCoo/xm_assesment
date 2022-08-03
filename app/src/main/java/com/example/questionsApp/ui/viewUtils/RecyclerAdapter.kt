@@ -29,9 +29,8 @@ class RecyclerAdapter(
 
     override fun getItemCount(): Int = questionsList?.size!!
 
-
-    class QuestionVIewHolder(private var binding: QuestionItemBinding,
-                             private var subCallback: (AnswerToSubmit?) -> Unit) :
+    inner class QuestionVIewHolder(private var binding: QuestionItemBinding,
+                                   private var subCallback: (AnswerToSubmit?) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
         private var currentQuestion: Question? = null
 
@@ -39,18 +38,8 @@ class RecyclerAdapter(
             currentQuestion = question
             binding.apply {
                 questionTxt.text = question?.question
-//                submit.bind(ButtonView.ButtonStates.SUBMITTED)
-//                submit.bind(ButtonView.ButtonStates.SUBMIT)
-//                submit.btnClickListener = this@QuestionVIewHolder
-                answerTxt.afterTextChanged {
-                    subCallback.invoke(AnswerToSubmit(currentQuestion?.id, it))
-
-                }
-
+                answerTxt.afterTextChanged { subCallback.invoke(AnswerToSubmit(currentQuestion?.id, it)) }
             }
         }
     }
-
-//
-
 }

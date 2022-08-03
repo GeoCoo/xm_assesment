@@ -8,13 +8,10 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.questionsApp.R
+import com.example.questionsApp.utils.BtnAction
 import com.example.questionsApp.utils.SubmissionConfirmation
 
 class ConfirmationVIew : ConstraintLayout, View.OnClickListener {
-
-    enum class BtnAction {
-        RETRY, CLOSE
-    }
 
     interface ConfirmationViewClickListener {
         fun onConfirmActionClick(btnAction: BtnAction)

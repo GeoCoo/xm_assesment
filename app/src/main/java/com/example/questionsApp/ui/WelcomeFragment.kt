@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.questionsApp.R
 import com.example.questionsApp.databinding.FragmentWelcomeBinding
 import com.example.questionsApp.ui.viewUtils.ButtonView
+import com.example.questionsApp.utils.ButtonStates
 
 class WelcomeFragment : Fragment(), ButtonView.BtnClickListener {
 
@@ -23,7 +24,7 @@ class WelcomeFragment : Fragment(), ButtonView.BtnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
-            startBtn.bind(ButtonView.ButtonStates.START)
+            startBtn.bind(ButtonStates.START)
             startBtn.btnClickListener = this@WelcomeFragment
         }
     }

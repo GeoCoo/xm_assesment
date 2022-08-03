@@ -50,7 +50,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         submissionResponseMutable.observe(lifecycleOwner, observer)
     }
 
-
     fun submissionCounting(): MutableLiveData<Int> {
         submissionCounterMutable.value = answersCount
         return submissionCounterMutable
@@ -60,6 +59,4 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         answersCount += 1
         submissionCounterMutable.postValue(answersCount)
     }
-
-
 }

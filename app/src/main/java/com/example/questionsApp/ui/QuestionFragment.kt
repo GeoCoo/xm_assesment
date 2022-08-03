@@ -1,11 +1,13 @@
 package com.example.questionsApp.ui
 
+import ResponseStatus
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.questionsApp.R
@@ -20,6 +22,8 @@ import com.example.questionsApp.utils.convertToModel
 import com.example.questionsApp.viewmodels.MainViewModel
 import com.example.questionsApp.viewmodels.QuestionViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.util.*
+import kotlin.concurrent.schedule
 
 class QuestionFragment : Fragment(), ConfirmationVIew.ConfirmationViewClickListener {
 
@@ -66,11 +70,9 @@ class QuestionFragment : Fragment(), ConfirmationVIew.ConfirmationViewClickListe
 
     private fun checkSubmissions() {
         mainViewModel.observeSubmissionResponse(viewLifecycleOwner) { response ->
-            if (response == null) {
-                binding.confirmationVIew.bind(SubmissionConfirmation.FAIL)
-                binding.confirmationVIew.confirmationClickListener = this@QuestionFragment
-            } else binding.confirmationVIew.bind(SubmissionConfirmation.SUCCESS)
-
+            if (response != ResponseStatus.OK.code.toString()) binding.confirmationVIew.bind(SubmissionConfirmation.FAIL)
+            else binding.confirmationVIew.bind(SubmissionConfirmation.SUCCESS)
+            binding.confirmationVIew.confirmationClickListener = this@QuestionFragment
         }
     }
 
@@ -144,8 +146,6 @@ class QuestionFragment : Fragment(), ConfirmationVIew.ConfirmationViewClickListe
         when (btnAction) {
             ConfirmationVIew.BtnAction.RETRY -> {
                 clickCallBack.invoke(answerToSubmit)
-                binding.confirmationVIew.visibility = View.GONE
-
             }
             ConfirmationVIew.BtnAction.CLOSE -> {
                 binding.confirmationVIew.visibility = View.GONE

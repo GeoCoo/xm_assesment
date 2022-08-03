@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
 
 sealed class ServiceException : Exception() {
     data class JsonDesiriazion(val messageDesc: String, val e: Exception? = null) : Exception()
-    class NotOkException: Exception()
+    class NotOkException : Exception()
     class TimeOutException : Exception()
 }
 
@@ -67,11 +67,17 @@ abstract class Service {
                 val modelDesiriazed = Gson().fromJson(payload, T::class.java)
                 Log.d("lalalalalalalla", modelDesiriazed.toString())
 
-                if (modelDesiriazed != null) {
-                    return@withContext NetworkResponse.Success(modelDesiriazed)
-                } else {
-                    val exception = ServiceException.JsonDesiriazion("Deserialzed error at ${T::class.java.name}")
-                    return@withContext NetworkResponse.Error(exception)
+                when {
+                    modelDesiriazed != null -> {
+                        return@withContext NetworkResponse.Success(modelDesiriazed)
+                    }
+                    modelDesiriazed == null && statusCode == ResponseStatus.OK.code -> {
+                        return@withContext NetworkResponse.Success(ResponseStatus.OK.code)
+                    }
+                    else -> {
+                        val exception = ServiceException.JsonDesiriazion("Deserialzed error at ${T::class.java.name}")
+                        return@withContext NetworkResponse.Error(exception)
+                    }
                 }
             } catch (e: Exception) {
                 val exception = ServiceException.JsonDesiriazion("Deserialzed error at ${T::class.java.name}", e)
@@ -88,3 +94,7 @@ fun FuelError.isTimeOut(): Boolean {
 inline fun <reified T> parseData(row: String): T {
     return Gson().fromJson(row, object : TypeToken<T>() {}.type)
 }
+
+
+
+

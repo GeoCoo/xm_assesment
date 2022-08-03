@@ -46,11 +46,13 @@ class ConfirmationVIew : ConstraintLayout, View.OnClickListener {
                 confirmationVIew.setBackgroundColor(resources.getColor(R.color.green))
                 result.text = resources.getString(R.string.success)
                 closeAction.setOnClickListener(this)
+                button.visibility = View.GONE
 
             }
             SubmissionConfirmation.FAIL -> {
                 confirmationVIew.setBackgroundColor(resources.getColor(R.color.red))
                 result.text = resources.getString(R.string.fail)
+                button.visibility = View.VISIBLE
                 closeAction.setOnClickListener(this)
                 button.setOnClickListener(this)
             }

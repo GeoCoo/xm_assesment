@@ -1,5 +1,6 @@
 package com.example.questionsApp.ui
 
+import ResponseStatus
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -24,18 +25,25 @@ class MainActivity : AppCompatActivity() {
     @OptIn(DelicateCoroutinesApi::class)
     override fun onResume() {
         super.onResume()
-        GlobalScope.launch(Dispatchers.Main) {
-            mainViewModel.apply {
-                fetchQuestions()
+        mainViewModel.apply {
+            GlobalScope.launch(Dispatchers.IO) {
+                val questionsList = fetchQuestions()
+                postQuestionsList(questionsList)
             }
-            mainViewModel.observeSubmittedAnswer(this@MainActivity) { submition ->
-                if (submition == null) Toast.makeText(this@MainActivity, this@MainActivity.resources.getString(R.string.no_answer), Toast.LENGTH_LONG).show()
-                else
+            observeSubmittedAnswer(this@MainActivity) { submition ->
+                if (submition != null)
                     CoroutineScope(Dispatchers.IO).launch {
-                        mainViewModel.submitAnswer(submition)
-                    }
+                        val submissionResponse = submitAnswer(submition)
+                        postSubmissionResponse(submissionResponse)
+                        if (submissionResponse == ResponseStatus.OK.code.toString()) addToSubmissionCounter()
+                    } else makeToast()
             }
         }
 
     }
+
+
+    private fun makeToast() = Toast.makeText(this@MainActivity,
+        this@MainActivity.resources.getString(R.string.no_answer),
+        Toast.LENGTH_LONG).show()
 }

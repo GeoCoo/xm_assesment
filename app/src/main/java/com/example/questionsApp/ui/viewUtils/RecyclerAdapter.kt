@@ -3,21 +3,23 @@ package com.example.questionsApp.ui.viewUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.questionsApp.R
 import com.example.questionsApp.databinding.QuestionItemBinding
 import com.example.questionsApp.models.AnswerToSubmit
 import com.example.questionsApp.models.Question
 import com.example.questionsApp.utils.afterTextChanged
 
 
-class RecyclerAdapter(private val questionsList: List<Question>?, private var clickCallBack: (AnswerToSubmit?) -> Unit) :
+class RecyclerAdapter(
+    private val questionsList: List<Question>?,
+    private var subCallback: (AnswerToSubmit?) -> Unit,
+) :
     RecyclerView.Adapter<RecyclerAdapter.QuestionVIewHolder>() {
 
     private lateinit var binding: QuestionItemBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuestionVIewHolder {
         binding = QuestionItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return QuestionVIewHolder(binding, clickCallBack)
+        return QuestionVIewHolder(binding, subCallback)
     }
 
     override fun onBindViewHolder(holder: QuestionVIewHolder, position: Int) {
@@ -28,26 +30,27 @@ class RecyclerAdapter(private val questionsList: List<Question>?, private var cl
     override fun getItemCount(): Int = questionsList?.size!!
 
 
-    class QuestionVIewHolder(private var binding: QuestionItemBinding, private var clickCallBack: (AnswerToSubmit?) -> Unit) :
-        RecyclerView.ViewHolder(binding.root), ButtonView.BtnClickListener {
+    class QuestionVIewHolder(private var binding: QuestionItemBinding,
+                             private var subCallback: (AnswerToSubmit?) -> Unit) :
+        RecyclerView.ViewHolder(binding.root) {
         private var currentQuestion: Question? = null
-        private var answer: AnswerToSubmit? = null
-
-        override fun onBtnActionClick() {
-            clickCallBack.invoke(answer)
-        }
 
         fun bind(question: Question?) {
             currentQuestion = question
             binding.apply {
                 questionTxt.text = question?.question
-                submit.bind(itemView.resources.getString(R.string.submit_btn_txt))
-                submit.btnClickListener = this@QuestionVIewHolder
-                answerTxt.afterTextChanged { answer = AnswerToSubmit(currentQuestion?.id, it) }
+//                submit.bind(ButtonView.ButtonStates.SUBMITTED)
+//                submit.bind(ButtonView.ButtonStates.SUBMIT)
+//                submit.btnClickListener = this@QuestionVIewHolder
+                answerTxt.afterTextChanged {
+                    subCallback.invoke(AnswerToSubmit(currentQuestion?.id, it))
+
+                }
 
             }
         }
     }
 
+//
 
 }

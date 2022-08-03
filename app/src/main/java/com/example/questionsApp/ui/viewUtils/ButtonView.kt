@@ -6,12 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import com.example.questionsApp.R
 
 class ButtonView : CardView, View.OnClickListener {
 
     interface BtnClickListener {
         fun onBtnActionClick()
+    }
+
+    enum class ButtonStates {
+        START, SUBMIT, SUBMITTED
     }
 
 
@@ -33,8 +38,30 @@ class ButtonView : CardView, View.OnClickListener {
 
     }
 
-    fun bind(title: String) {
-        btnTitle.text = title
+    fun bind(state: ButtonStates) {
+        when (state) {
+            ButtonStates.START -> {
+                btnTitle.text = resources.getString(R.string.start)
+                button.setBackgroundColor(resources.getColor(R.color.white))
+                btnTitle.setTextColor(ContextCompat.getColor(context, R.color.sub_blue))
+                button.isEnabled = true
+                button.isClickable = true
+            }
+            ButtonStates.SUBMITTED -> {
+                btnTitle.text = resources.getString(R.string.submitted)
+                button.isEnabled = false
+                button.isClickable = false
+                button.setBackgroundColor(resources.getColor(R.color.dark_grey))
+                btnTitle.setTextColor(ContextCompat.getColor(context, R.color.white))
+            }
+            ButtonStates.SUBMIT -> {
+                btnTitle.text = resources.getString(R.string.submit_btn_txt)
+                button.setBackgroundColor(resources.getColor(R.color.white))
+                btnTitle.setTextColor(ContextCompat.getColor(context, R.color.sub_blue))
+                button.isEnabled = true
+                button.isClickable = true
+            }
+        }
     }
 
 

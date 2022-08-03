@@ -23,7 +23,7 @@ class WelcomeFragment : Fragment(), ButtonView.BtnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
-            startBtn.bind("Start Survey")
+            startBtn.bind(ButtonView.ButtonStates.START)
             startBtn.btnClickListener = this@WelcomeFragment
         }
     }

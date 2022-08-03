@@ -16,8 +16,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val submitController: SubmitAnswerController by lazy { SubmitAnswerController() }
     private val questionResponseMutable: MutableLiveData<ArrayList<*>?> by lazy { MutableLiveData<ArrayList<*>?>() }
     private val submittedAnswerMutable: MutableLiveData<AnswerToSubmit?> by lazy { MutableLiveData<AnswerToSubmit?>() }
-    private var submissionResponseMutable: MutableLiveData<String?> = MutableLiveData<String?>()
     private val submissionCounterMutable: MutableLiveData<Int> by lazy { MutableLiveData<Int>() }
+    private var submissionResponseMutable: MutableLiveData<String?> = MutableLiveData<String?>()
     private var answersCount: Int = 0
 
     suspend fun fetchQuestions(): ArrayList<*>? = mainController.fetchQuestions()

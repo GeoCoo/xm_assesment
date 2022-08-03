@@ -9,7 +9,8 @@
         <entry key="app/src/main/res/layout/comfirmation_view.xml" value="0.1540020263424519" />
         <entry key="app/src/main/res/layout/fragment_question.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_welcome.xml" value="0.45" />
-        <entry key="app/src/main/res/layout/question_item.xml" value="0.315625" />
+        <entry key="app/src/main/res/layout/question_item.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/top_bar.xml" value="0.1534954407294833" />
       </map>
     </option>
   </component>

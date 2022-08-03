@@ -23,8 +23,7 @@
             android:layout_marginEnd="50dp"
             android:layout_marginBottom="5dp"
             android:gravity="center"
-            android:textColor="#55aaff"
-
+            android:textColor="@color/sub_blue"
             android:textSize="20sp"
             tools:text="Start Survey" />
 

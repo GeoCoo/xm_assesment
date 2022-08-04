@@ -26,17 +26,18 @@ class RecyclerAdapter(
     override fun onBindViewHolder(holder: QuestionVIewHolder, position: Int) {
         val question = questionsList?.get(position)
         holder.bind(question)
-    }override fun getItemCount(): Int = questionsList?.size!!
+    }
+
+    override fun getItemCount(): Int = questionsList?.size!!
 
     inner class QuestionVIewHolder(private var binding: QuestionItemBinding, private var subCallback: (AnswerToSubmit?) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
-        private var currentQuestion: Question? = null
 
         fun bind(question: Question?) {
-            currentQuestion = question
             binding.apply {
                 questionTxt.text = question?.question
-                answerTxt.afterTextChanged { subCallback.invoke(AnswerToSubmit(currentQuestion?.id, it)) }
+                subCallback.invoke(null)
+                answerTxt.afterTextChanged { subCallback.invoke(AnswerToSubmit(question?.id, it)) }
             }
         }
     }

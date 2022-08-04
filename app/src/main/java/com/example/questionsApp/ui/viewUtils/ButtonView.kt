@@ -42,12 +42,12 @@ class ButtonView : CardView, View.OnClickListener {
                 button.isEnabled = true
                 button.isClickable = true
             }
-            ButtonStates.SUBMITTED -> {
-                btnTitle.text = resources.getString(R.string.submitted)
+            ButtonStates.SUBMITTED_SUCCESS -> {
+                btnTitle.text = resources.getString(R.string.submitted_success)
                 button.isEnabled = false
                 button.isClickable = false
-                button.setBackgroundColor(resources.getColor(R.color.dark_grey))
-                btnTitle.setTextColor(ContextCompat.getColor(context, R.color.white))
+                button.setBackgroundColor(resources.getColor(R.color.white))
+                btnTitle.setTextColor(ContextCompat.getColor(context, R.color.sub_blue))
             }
             ButtonStates.SUBMIT -> {
                 btnTitle.text = resources.getString(R.string.submit_btn_txt)
@@ -56,6 +56,14 @@ class ButtonView : CardView, View.OnClickListener {
                 button.isEnabled = true
                 button.isClickable = true
             }
+            ButtonStates.ALREADY_SUBMITTED -> {
+                btnTitle.text = resources.getString(R.string.submitted_already)
+                button.isEnabled = false
+                button.isClickable = false
+                button.setBackgroundColor(resources.getColor(R.color.dark_grey))
+                btnTitle.setTextColor(ContextCompat.getColor(context, R.color.white))
+            }
+
         }
     }
 

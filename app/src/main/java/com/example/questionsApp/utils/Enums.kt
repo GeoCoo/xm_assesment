@@ -6,7 +6,7 @@ enum class Method {
 }
 
 enum class ButtonStates {
-    START, SUBMIT, SUBMITTED
+    START, SUBMIT, SUBMITTED_SUCCESS,ALREADY_SUBMITTED
 }
 
 enum class BtnAction {

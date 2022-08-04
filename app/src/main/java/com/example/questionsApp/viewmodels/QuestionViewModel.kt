@@ -41,7 +41,11 @@ class QuestionViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun checkIfSubmitted(id: Int?): ButtonStates {
-        return if (list.contains(id)) ButtonStates.SUBMITTED else ButtonStates.SUBMIT
+        return if (list.contains(id)) ButtonStates.ALREADY_SUBMITTED else ButtonStates.SUBMIT
+    }
+
+    fun checkSubmittedSuccess():ButtonStates{
+        return ButtonStates.SUBMITTED_SUCCESS
     }
 
     fun setNavButtonVisibility(count: Int, size: Int?, state: QuestionNavBtnState): Int {

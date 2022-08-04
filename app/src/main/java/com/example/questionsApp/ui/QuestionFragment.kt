@@ -99,7 +99,7 @@ class QuestionFragment : Fragment(), ConfirmationVIew.ConfirmationViewClickListe
             if (response == ResponseStatus.OK.code.toString()) {
                 binding.confirmationVIew.bind(SubmissionConfirmation.SUCCESS)
                 answerToSubmit?.id?.let { id -> viewModel.postSubmittedId(id) }
-                setSubmitBtn(answerToSubmit?.id)
+                binding.submit.bind(viewModel.checkSubmittedSuccess())
             } else binding.confirmationVIew.bind(SubmissionConfirmation.FAIL)
         }
     }
@@ -120,6 +120,7 @@ class QuestionFragment : Fragment(), ConfirmationVIew.ConfirmationViewClickListe
                 currentQuestionNumber.text = "$countSteps"
                 handleBtnVisibility(countSteps, questionsSize)
                 questionsRecycler.scrollToPosition(countSteps - 1)
+                questionsRecycler.adapter?.notifyItemChanged(countSteps - 1, adapter.PAYLOAD_NAME)
                 setSubmitBtn(countSteps)
             }
         }

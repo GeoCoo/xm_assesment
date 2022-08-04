@@ -8,6 +8,6 @@
     <string name="fail">FAILURE</string>
     <string name="start">Start Survey</string>
     <string name="submit_btn_txt">Submit</string>
-    <string name="submitted">Already Submitted</string>
-
+    <string name="submitted_already">Already Submitted</string>
+    <string name="submitted_success">Submitted Successfully</string>
 </resources>

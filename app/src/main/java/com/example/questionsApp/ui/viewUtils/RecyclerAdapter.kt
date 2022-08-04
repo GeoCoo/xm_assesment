@@ -15,7 +15,9 @@ class RecyclerAdapter(
 ) :
     RecyclerView.Adapter<RecyclerAdapter.QuestionVIewHolder>() {
 
+
     private lateinit var binding: QuestionItemBinding
+    val PAYLOAD_NAME = "PAYLOAD_NAME"
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuestionVIewHolder {
         binding = QuestionItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -25,12 +27,9 @@ class RecyclerAdapter(
     override fun onBindViewHolder(holder: QuestionVIewHolder, position: Int) {
         val question = questionsList?.get(position)
         holder.bind(question)
-    }
+    }override fun getItemCount(): Int = questionsList?.size!!
 
-    override fun getItemCount(): Int = questionsList?.size!!
-
-    inner class QuestionVIewHolder(private var binding: QuestionItemBinding,
-                                   private var subCallback: (AnswerToSubmit?) -> Unit) :
+    inner class QuestionVIewHolder(private var binding: QuestionItemBinding, private var subCallback: (AnswerToSubmit?) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
         private var currentQuestion: Question? = null
 

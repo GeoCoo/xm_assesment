@@ -17,7 +17,6 @@ class RecyclerAdapter(
 
 
     private lateinit var binding: QuestionItemBinding
-    val PAYLOAD_NAME = "PAYLOAD_NAME"
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuestionVIewHolder {
         binding = QuestionItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)

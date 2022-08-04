@@ -120,7 +120,7 @@ class QuestionFragment : Fragment(), ConfirmationVIew.ConfirmationViewClickListe
                 currentQuestionNumber.text = "$countSteps"
                 handleBtnVisibility(countSteps, questionsSize)
                 questionsRecycler.scrollToPosition(countSteps - 1)
-                questionsRecycler.adapter?.notifyItemChanged(countSteps - 1, adapter.PAYLOAD_NAME)
+                questionsRecycler.adapter?.notifyItemChanged(countSteps - 1)
                 setSubmitBtn(countSteps)
             }
         }

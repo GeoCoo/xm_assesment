@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         mainViewModel.apply {
-            CoroutineScope(Dispatchers.IO).launch(Dispatchers.IO) {
+            CoroutineScope(Dispatchers.IO).launch {
                 val questionsList = fetchQuestions()
                 postQuestionsList(questionsList)
             }

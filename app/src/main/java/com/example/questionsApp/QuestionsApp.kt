@@ -4,7 +4,7 @@ import android.app.Application
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
-class QuestionsApp : Application() {
+open class QuestionsApp : Application() {
 
     override fun onCreate() {
         super.onCreate()

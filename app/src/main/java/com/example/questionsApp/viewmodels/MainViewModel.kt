@@ -10,19 +10,19 @@ import com.example.questionsApp.network.controllers.GetQuestionsController
 import com.example.questionsApp.network.controllers.SubmitAnswerController
 
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+open class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val mainController: GetQuestionsController by lazy { GetQuestionsController() }
     private val submitController: SubmitAnswerController by lazy { SubmitAnswerController() }
-    private val questionResponseMutable: MutableLiveData<ArrayList<*>?> by lazy { MutableLiveData<ArrayList<*>?>() }
+    val questionResponseMutable: MutableLiveData<ArrayList<*>?> by lazy { MutableLiveData<ArrayList<*>?>() }
     private val submittedAnswerMutable: MutableLiveData<AnswerToSubmit?> by lazy { MutableLiveData<AnswerToSubmit?>() }
     private val submissionCounterMutable: MutableLiveData<Int> by lazy { MutableLiveData<Int>() }
     private var submissionResponseMutable: MutableLiveData<String?> = MutableLiveData<String?>()
     private var answersCount: Int = 0
 
-    suspend fun fetchQuestions(): ArrayList<*>? = mainController.fetchQuestions()
+    open suspend fun fetchQuestions(): ArrayList<Any>? = mainController.fetchQuestions()
 
-    fun postQuestionsList(response: ArrayList<*>?) {
+    open fun postQuestionsList(response: ArrayList<Any>?) {
         questionResponseMutable.postValue(response)
     }
 
@@ -39,7 +39,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         submittedAnswerMutable.observe(lifecycleOwner, observer)
     }
 
-    suspend fun submitAnswer(questionSubmit: AnswerToSubmit?): String? = submitController.submitAnswer(questionSubmit)
+    open suspend fun submitAnswer(questionSubmit: AnswerToSubmit?): String? = submitController.submitAnswer(questionSubmit)
 
     fun postSubmissionResponse(response: String?) {
         submissionResponseMutable.postValue(response)

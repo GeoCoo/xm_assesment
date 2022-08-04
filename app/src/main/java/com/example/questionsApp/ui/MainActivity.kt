@@ -7,7 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.questionsApp.R
 import com.example.questionsApp.databinding.ActivityMainBinding
 import com.example.questionsApp.viewmodels.MainViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -26,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         mainViewModel.apply {
-            GlobalScope.launch(Dispatchers.IO) {
+            CoroutineScope(Dispatchers.IO).launch(Dispatchers.IO) {
                 val questionsList = fetchQuestions()
                 postQuestionsList(questionsList)
             }

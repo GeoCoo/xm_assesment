@@ -5,12 +5,12 @@ import Service
 import com.example.questionsApp.network.requests.QuestionsRequest
 import com.google.gson.internal.LinkedTreeMap
 
-class GetQuestionsController : Service() {
+open class GetQuestionsController : Service() {
 
-    suspend fun fetchQuestions(): ArrayList<*>? {
+    open suspend fun fetchQuestions(): ArrayList<Any>? {
         val request = QuestionsRequest()
-        return when (val response = doSuspendRequest<ArrayList<*>?>(request)) {
-            is NetworkResponse.Success<*> -> response.result as ArrayList<*>?
+        return when (val response = doSuspendRequest<ArrayList<Any>?>(request)) {
+            is NetworkResponse.Success<*> -> response.result as ArrayList<Any>?
             else -> null
         }
     }

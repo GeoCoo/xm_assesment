@@ -82,23 +82,23 @@ class MainViewModelTest : KoinTest {
         assertTrue { response is NetworkResponse.Success<*> }
     }
 
-
     @Test
-    @Retry()
+    @Retry
     fun whenSubmitAnswerRetryUntilFails() = runBlocking {
-        val mocQuestion = AnswerToSubmit(1, "some random shit")
-        val request = SubmitAnswerRequest(mocQuestion)
+        val mockAnswer = AnswerToSubmit(1, "some random shit")
+        val request = SubmitAnswerRequest(mockAnswer)
         val response = submitAnswerController.doSuspendRequest<String?>(request)
+        assertNotNull(response)
         assertTrue { response is NetworkResponse.Error }
     }
 
-
     @Test
-    fun whenSubmitWithOutAnswer() = runBlocking {
-        val mocQuestion = AnswerToSubmit(1, "")
-        val request = SubmitAnswerRequest(mocQuestion)
-        val response = submitAnswerController.doSuspendRequest<String?>(request)
-        assertTrue { response is NetworkResponse.Error }
+    fun whenPostAnswerToSubmit() = runBlocking {
+        val mockAnswer = AnswerToSubmit(1, "some random shit")
+        mainViewModel.postSubmittedAnswer(mockAnswer)
+        assertNotNull(mainViewModel.submittedAnswerMutable.value)
+        assertTrue { mainViewModel.submittedAnswerMutable.value?.answer?.isNotEmpty() == true }
+
     }
 
 

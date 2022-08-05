@@ -1,11 +1,11 @@
-import android.util.Log
-import com.example.questionsApp.network.BaseRequest
+package com.example.questionsApp.network
+
+import com.example.questionsApp.network.requests.BaseRequest
 import com.example.questionsApp.utils.Method
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.FuelError
 import com.github.kittinunf.fuel.core.ResponseResultOf
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -49,12 +49,6 @@ abstract class Service {
                     .responseString()
             }
 
-            Log.d("tatatatatatatatatata", localResponse.second.statusCode.toString())
-            Log.d("xaxxaxaxaxaxaxxaxxxx", localResponse.first.body.toString())
-            Log.d("sasasasasasasasasasas", localResponse.third.component1().toString())
-            Log.d("dadadadadadadadadada", localResponse.third.component2().toString())
-
-
             val statusCode = localResponse.second.statusCode
             if (statusCode == ResponseStatus.NOT_OK.code) {
                 return@withContext NetworkResponse.Error(ServiceException.NotOkException())
@@ -66,8 +60,6 @@ abstract class Service {
             }
             try {
                 val modelDesiriazed = Gson().fromJson(payload, T::class.java)
-                Log.d("lalalalalalalla", modelDesiriazed.toString())
-
                 when {
                     modelDesiriazed != null -> {
                         return@withContext NetworkResponse.Success(modelDesiriazed)

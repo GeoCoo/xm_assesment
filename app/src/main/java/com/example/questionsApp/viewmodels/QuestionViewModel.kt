@@ -1,12 +1,12 @@
 package com.example.questionsApp.viewmodels
 
-import ResponseStatus
 import android.app.Application
 import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.example.questionsApp.network.ResponseStatus
 import com.example.questionsApp.utils.ButtonStates
 import com.example.questionsApp.utils.QuestionNavBtnState
 

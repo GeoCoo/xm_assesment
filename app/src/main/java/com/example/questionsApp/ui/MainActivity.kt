@@ -1,11 +1,11 @@
 package com.example.questionsApp.ui
 
-import ResponseStatus
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.questionsApp.R
 import com.example.questionsApp.databinding.ActivityMainBinding
+import com.example.questionsApp.network.ResponseStatus
 import com.example.questionsApp.viewmodels.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

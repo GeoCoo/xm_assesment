@@ -1,8 +1,8 @@
 package com.example.questionsApp.network.controllers
 
-import NetworkResponse
-import Service
 import com.example.questionsApp.models.AnswerToSubmit
+import com.example.questionsApp.network.NetworkResponse
+import com.example.questionsApp.network.Service
 import com.example.questionsApp.network.requests.SubmitAnswerRequest
 
 class SubmitAnswerController : Service() {

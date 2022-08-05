@@ -17,12 +17,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import org.koin.test.KoinTest
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class QuestionViewModelTest : KoinTest {
+class QuestionViewModelTest {
     private lateinit var viewModel: QuestionViewModel
     private lateinit var mainViewModel: MainViewModel
     private var counter: Int? = null

@@ -1,4 +1,4 @@
-package com.example.questionsApp.network
+package com.example.questionsApp.network.requests
 
 import com.example.questionsApp.utils.Method
 import com.github.kittinunf.fuel.core.Parameters

@@ -1,11 +1,11 @@
 package com.example.questionsApp
 
-import NetworkResponse
-import ResponseStatus
 import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.MediumTest
 import com.example.questionsApp.models.AnswerToSubmit
+import com.example.questionsApp.network.NetworkResponse
+import com.example.questionsApp.network.ResponseStatus
 import com.example.questionsApp.network.controllers.GetQuestionsController
 import com.example.questionsApp.network.controllers.SubmitAnswerController
 import com.example.questionsApp.network.requests.QuestionsRequest
@@ -23,14 +23,13 @@ import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.koin.test.KoinTest
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 
 @RunWith(JUnit4::class)
 @MediumTest
-class MainViewModelTest : KoinTest {
+class MainViewModelTest {
 
     private lateinit var getQuestionsController: GetQuestionsController
     private lateinit var submitAnswerController: SubmitAnswerController

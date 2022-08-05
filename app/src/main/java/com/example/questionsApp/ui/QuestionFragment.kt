@@ -1,6 +1,5 @@
 package com.example.questionsApp.ui
 
-import ResponseStatus
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +12,7 @@ import com.example.questionsApp.R
 import com.example.questionsApp.databinding.FragmentQuestionBinding
 import com.example.questionsApp.models.AnswerToSubmit
 import com.example.questionsApp.models.Question
+import com.example.questionsApp.network.ResponseStatus
 import com.example.questionsApp.ui.viewUtils.ButtonView
 import com.example.questionsApp.ui.viewUtils.ConfirmationVIew
 import com.example.questionsApp.ui.viewUtils.CustomRecyclerManager
@@ -66,9 +66,9 @@ class QuestionFragment : Fragment(), ConfirmationVIew.ConfirmationViewClickListe
             observeQuestions()
             checkSubmissionStatus()
             navigateBack()
-            clickCount()
             clickNextBtn()
             clickPreviousBtn()
+            clickCount()
             setSuccessfulSubmissions()
             observeSubmittedIds()
             submit.btnClickListener = this@QuestionFragment

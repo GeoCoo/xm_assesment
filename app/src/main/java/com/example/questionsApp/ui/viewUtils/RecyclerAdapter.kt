@@ -28,6 +28,10 @@ class RecyclerAdapter(
         holder.bind(question)
     }
 
+    override fun getItemViewType(position: Int) = position
+
+    override fun getItemId(position: Int) = position.toLong()
+
     override fun getItemCount(): Int = questionsList?.size!!
 
     inner class QuestionVIewHolder(private var binding: QuestionItemBinding, private var subCallback: (AnswerToSubmit?) -> Unit) :

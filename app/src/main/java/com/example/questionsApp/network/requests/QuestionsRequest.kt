@@ -1,6 +1,5 @@
 package com.example.questionsApp.network.requests
 
-import com.example.questionsApp.network.BaseRequest
 import com.example.questionsApp.utils.Method
 
 

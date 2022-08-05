@@ -1,5 +1,6 @@
 package com.example.questionsApp.viewmodels
 
+import ResponseStatus
 import android.app.Application
 import android.view.View
 import androidx.lifecycle.AndroidViewModel
@@ -11,9 +12,9 @@ import com.example.questionsApp.utils.QuestionNavBtnState
 
 class QuestionViewModel(application: Application) : AndroidViewModel(application) {
 
-    private var clickCount: Int = 1
-    private val counterMutable: MutableLiveData<Int> by lazy { MutableLiveData<Int>() }
-    private var submittedIdsMutable: MutableLiveData<List<Int>?> = MutableLiveData()
+    var clickCount: Int = 1
+    val counterMutable: MutableLiveData<Int> by lazy { MutableLiveData<Int>() }
+    var submittedIdsMutable: MutableLiveData<List<Int>?> = MutableLiveData()
     private val list: ArrayList<Int> = arrayListOf()
 
     fun getCountTotal(): MutableLiveData<Int> {
@@ -44,8 +45,8 @@ class QuestionViewModel(application: Application) : AndroidViewModel(application
         return if (list.contains(id)) ButtonStates.ALREADY_SUBMITTED else ButtonStates.SUBMIT
     }
 
-    fun checkSubmittedSuccess():ButtonStates{
-        return ButtonStates.SUBMITTED_SUCCESS
+    fun checkSubmittedSuccess(response: String?): ButtonStates {
+        return if (response == ResponseStatus.OK.code.toString()) ButtonStates.SUBMITTED_SUCCESS else ButtonStates.SUBMIT
     }
 
     fun setNavButtonVisibility(count: Int, size: Int?, state: QuestionNavBtnState): Int {
@@ -57,5 +58,9 @@ class QuestionViewModel(application: Application) : AndroidViewModel(application
                 if (count in 1 until size!!) View.VISIBLE else View.GONE
             }
         }
+    }
+
+    fun removeView(view: View) {
+        if (view.isShown) view.visibility = View.GONE
     }
 }

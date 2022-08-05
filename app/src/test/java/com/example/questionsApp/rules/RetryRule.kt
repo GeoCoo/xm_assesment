@@ -4,7 +4,8 @@ import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 
-annotation class Retry
+@Retention(AnnotationRetention.RUNTIME)
+annotation class  Retry
 
 class RetryRule(val retryCount:Int) : TestRule {
     override fun apply(base: Statement, description: Description): Statement {
@@ -33,3 +34,5 @@ class RetryRule(val retryCount:Int) : TestRule {
         }
     }
 }
+
+

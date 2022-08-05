@@ -1,6 +1,7 @@
 package com.example.questionsApp
 
 import NetworkResponse
+import ResponseStatus
 import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.MediumTest
@@ -26,6 +27,7 @@ import org.koin.test.KoinTest
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
+
 @RunWith(JUnit4::class)
 @MediumTest
 class MainViewModelTest : KoinTest {
@@ -33,6 +35,8 @@ class MainViewModelTest : KoinTest {
     private lateinit var getQuestionsController: GetQuestionsController
     private lateinit var submitAnswerController: SubmitAnswerController
     private lateinit var mainViewModel: MainViewModel
+    private lateinit var mockAnswer: AnswerToSubmit
+    private var counter: Int? = null
 
     @get:Rule
     val testInstantTaskExecutorRule: TestRule = InstantTaskExecutorRule()
@@ -42,13 +46,16 @@ class MainViewModelTest : KoinTest {
     var coroutineTestRule = CoroutineTestRule()
 
     @get:Rule
-    var rule = RetryRule(5)
+    var rule = RetryRule(6)
 
     @Before
     fun setUp() {
         mainViewModel = MainViewModel(Application())
         getQuestionsController = GetQuestionsController()
         submitAnswerController = SubmitAnswerController()
+        mockAnswer = AnswerToSubmit(1, "some random shit")
+        counter = 0
+
     }
 
 
@@ -68,6 +75,7 @@ class MainViewModelTest : KoinTest {
 
 
     @Test
+    @Retry
     fun whenFetchingResultsAndPostThem() = runBlocking {
         val responseList = mainViewModel.fetchQuestions()
         mainViewModel.postQuestionsList(responseList)
@@ -75,9 +83,9 @@ class MainViewModelTest : KoinTest {
     }
 
     @Test
+    @Retry
     fun whenSubmitAnswerRetryUntilSuccess() = runBlocking {
-        val mocQuestion = AnswerToSubmit(1, "some random shit")
-        val request = SubmitAnswerRequest(mocQuestion)
+        val request = SubmitAnswerRequest(mockAnswer)
         val response = submitAnswerController.doSuspendRequest<String?>(request)
         assertTrue { response is NetworkResponse.Success<*> }
     }
@@ -85,7 +93,6 @@ class MainViewModelTest : KoinTest {
     @Test
     @Retry
     fun whenSubmitAnswerRetryUntilFails() = runBlocking {
-        val mockAnswer = AnswerToSubmit(1, "some random shit")
         val request = SubmitAnswerRequest(mockAnswer)
         val response = submitAnswerController.doSuspendRequest<String?>(request)
         assertNotNull(response)
@@ -93,13 +100,29 @@ class MainViewModelTest : KoinTest {
     }
 
     @Test
+    @Retry
     fun whenPostAnswerToSubmit() = runBlocking {
-        val mockAnswer = AnswerToSubmit(1, "some random shit")
         mainViewModel.postSubmittedAnswer(mockAnswer)
         assertNotNull(mainViewModel.submittedAnswerMutable.value)
         assertTrue { mainViewModel.submittedAnswerMutable.value?.answer?.isNotEmpty() == true }
-
     }
 
+    @Test
+    @Retry
+    fun whenPostSuccessfulSubmit() = runBlocking {
+        val response = mainViewModel.submitAnswer(mockAnswer)
+        val responseStatus = mainViewModel.postSubmissionResponse(response)
+        assertNotNull(responseStatus)
+        assertTrue { mainViewModel.submissionResponseMutable.value == ResponseStatus.OK.code.toString() }
+    }
 
+    @Test
+    fun whenPostSuccessfulSubmitCounting() = runBlocking {
+        val response = mainViewModel.submitAnswer(mockAnswer)
+        mainViewModel.postSubmissionResponse(response)
+        mainViewModel.addToSubmissionCounter()
+        assertTrue { mainViewModel.submissionCounterMutable.value == counter!! + 1 }
+    }
 }
+
+

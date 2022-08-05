@@ -8,8 +8,8 @@ import com.example.questionsApp.R
 import com.example.questionsApp.databinding.ActivityMainBinding
 import com.example.questionsApp.viewmodels.MainViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -22,17 +22,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        fetchQuestions()
         setContentView(binding.root)
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     override fun onResume() {
         super.onResume()
-        mainViewModel.apply {
-            CoroutineScope(Dispatchers.IO).launch {
-                val questionsList = fetchQuestions()
-                postQuestionsList(questionsList)
+        CoroutineScope(Dispatchers.Main).launch {
+            mainViewModel.observeResponse(this@MainActivity) { questionsList ->
+                if (questionsList?.isEmpty() == true) fetchQuestions()
             }
+        }
+        mainViewModel.apply {
             observeSubmittedAnswer(this@MainActivity) { submition ->
                 if (submition != null)
                     CoroutineScope(Dispatchers.IO).launch {
@@ -40,6 +41,15 @@ class MainActivity : AppCompatActivity() {
                         postSubmissionResponse(submissionResponse)
                         if (submissionResponse == ResponseStatus.OK.code.toString()) addToSubmissionCounter()
                     } else makeToast()
+            }
+        }
+    }
+
+    private fun fetchQuestions() {
+        mainViewModel.apply {
+            CoroutineScope(Dispatchers.IO).launch {
+                val questionsList = fetchQuestions()
+                postQuestionsList(questionsList)
             }
         }
     }

@@ -38,16 +38,19 @@ class QuestionFragment : Fragment(), ConfirmationVIew.ConfirmationViewClickListe
 
     private var answerCallback: (AnswerToSubmit?) -> Unit = { answerToSubmit = it }
 
-    override fun onBtnActionClick() = mainViewModel.postSubmittedAnswer(answerToSubmit)
+    override fun onBtnActionClick() {
+        mainViewModel.postSubmittedAnswer(answerToSubmit)
+        viewModel.removeView(binding.confirmationVIew)
+    }
 
     override fun onConfirmActionClick(btnAction: BtnAction) {
         when (btnAction) {
             BtnAction.RETRY -> {
                 mainViewModel.postSubmittedAnswer(answerToSubmit)
-                binding.confirmationVIew.visibility = View.GONE
+                viewModel.removeView(binding.confirmationVIew)
             }
             BtnAction.CLOSE -> {
-                binding.confirmationVIew.visibility = View.GONE
+                viewModel.removeView(binding.confirmationVIew)
             }
         }
     }
@@ -63,9 +66,9 @@ class QuestionFragment : Fragment(), ConfirmationVIew.ConfirmationViewClickListe
             observeQuestions()
             checkSubmissionStatus()
             navigateBack()
+            clickCount()
             clickNextBtn()
             clickPreviousBtn()
-            clickCount()
             setSuccessfulSubmissions()
             observeSubmittedIds()
             submit.btnClickListener = this@QuestionFragment
@@ -99,8 +102,9 @@ class QuestionFragment : Fragment(), ConfirmationVIew.ConfirmationViewClickListe
             if (response == ResponseStatus.OK.code.toString()) {
                 binding.confirmationVIew.bind(SubmissionConfirmation.SUCCESS)
                 answerToSubmit?.id?.let { id -> viewModel.postSubmittedId(id) }
-                binding.submit.bind(viewModel.checkSubmittedSuccess())
             } else binding.confirmationVIew.bind(SubmissionConfirmation.FAIL)
+            binding.submit.bind(viewModel.checkSubmittedSuccess(response))
+
         }
     }
 
@@ -143,12 +147,14 @@ class QuestionFragment : Fragment(), ConfirmationVIew.ConfirmationViewClickListe
     private fun clickPreviousBtn() {
         binding.previousBtn.setOnClickListener {
             viewModel.getPreviousCount()
+            viewModel.removeView(binding.confirmationVIew)
         }
     }
 
     private fun clickNextBtn() {
         binding.nextBtn.setOnClickListener {
             viewModel.getNextCount()
+            viewModel.removeView(binding.confirmationVIew)
         }
     }
 
@@ -164,5 +170,4 @@ class QuestionFragment : Fragment(), ConfirmationVIew.ConfirmationViewClickListe
             nextBtn.visibility = viewModel.setNavButtonVisibility(count, size, QuestionNavBtnState.NEXT)
         }
     }
-
 }

@@ -10,19 +10,19 @@ import com.example.questionsApp.network.controllers.GetQuestionsController
 import com.example.questionsApp.network.controllers.SubmitAnswerController
 
 
-open class MainViewModel(application: Application) : AndroidViewModel(application) {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val mainController: GetQuestionsController by lazy { GetQuestionsController() }
     private val submitController: SubmitAnswerController by lazy { SubmitAnswerController() }
     val questionResponseMutable: MutableLiveData<ArrayList<*>?> by lazy { MutableLiveData<ArrayList<*>?>() }
     val submittedAnswerMutable: MutableLiveData<AnswerToSubmit?> by lazy { MutableLiveData<AnswerToSubmit?>() }
-    private val submissionCounterMutable: MutableLiveData<Int> by lazy { MutableLiveData<Int>() }
-    private var submissionResponseMutable: MutableLiveData<String?> = MutableLiveData<String?>()
+    val submissionCounterMutable: MutableLiveData<Int> by lazy { MutableLiveData<Int>() }
+    var submissionResponseMutable: MutableLiveData<String?> = MutableLiveData<String?>()
     private var answersCount: Int = 0
 
-    open suspend fun fetchQuestions(): ArrayList<Any>? = mainController.fetchQuestions()
+    suspend fun fetchQuestions(): ArrayList<Any>? = mainController.fetchQuestions()
 
-    open fun postQuestionsList(response: ArrayList<Any>?) {
+    fun postQuestionsList(response: ArrayList<Any>?) {
         questionResponseMutable.postValue(response)
     }
 
@@ -39,7 +39,7 @@ open class MainViewModel(application: Application) : AndroidViewModel(applicatio
         submittedAnswerMutable.observe(lifecycleOwner, observer)
     }
 
-    open suspend fun submitAnswer(questionSubmit: AnswerToSubmit?): String? = submitController.submitAnswer(questionSubmit)
+    suspend fun submitAnswer(questionSubmit: AnswerToSubmit?): String? = submitController.submitAnswer(questionSubmit)
 
     fun postSubmissionResponse(response: String?) {
         submissionResponseMutable.postValue(response)

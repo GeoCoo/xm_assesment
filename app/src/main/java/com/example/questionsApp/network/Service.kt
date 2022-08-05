@@ -91,11 +91,3 @@ abstract class Service {
 fun FuelError.isTimeOut(): Boolean {
     return this.exception.message == "timeout"
 }
-
-inline fun <reified T> parseData(row: String): T {
-    return Gson().fromJson(row, object : TypeToken<T>() {}.type)
-}
-
-
-
-
